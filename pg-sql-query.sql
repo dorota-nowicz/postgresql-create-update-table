@@ -1,24 +1,30 @@
- -- Create table curvas
+CREATE TABLE IF NOT EXISTS curvas (
+  id serial,
+  fk_puntoscontrol INTEGER,
+  datetime date NOT NULL,  
+  imm real NOT NULL,  
+  temez real NOT NULL);
+
+
 ALTER TABLE curvas 
+ADD CONSTRAINT fk_puntoscontrol FOREIGN KEY (fk_puntoscontrol) REFERENCES puntoscontrol (id);
 
--- add forwign key
-ADD CONSTRAINT fk_punto FOREIGN KEY (fk_punto) REFERENCES puntoscontrol (id);
 
--- fill with random data
 DO $$
 BEGIN
-   FOR counter IN 1..240 LOOP
+   FOR counter IN 1..5 LOOP
    		DECLARE  
-        _ids_array INTEGER[][];
-        _id INTEGER;
-   		fecha time :=  time '00:00' + counter * (time '00:10'); 
+		intervalo VARCHAR(50) := CONCAT(CAST(counter AS text),' hour');
+   		fecha timestamp :=  timestamp '2019-10-27 00:00:00' + intervalo ::interval;
+		i record; 
    		BEGIN
-		FOR _id IN
-     			 SELECT id FROM puntoscontrol
-			LOOP
-							INSERT into public.curvas (hora,imm,temez,fk_punto)
+		
+		
+			FOR i IN  select id from puntoscontrol
+						LOOP
+							INSERT into public.curvas (datetime,imm,temez,fk_puntoscontrol)
 							VALUES
-							( fecha , random()*(25-1)+10 ,random()*(25-1)+10,_id);
+							( fecha , random()*(25-1)+counter,random()*(25-1)+counter ,i.id);
 			END LOOP;
 		END;
 		
