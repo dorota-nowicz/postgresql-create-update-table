@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS curvas (
   id serial,
   fk_puntoscontrol INTEGER,
-  datetime date NOT NULL,  
+  fechahora timestamp without time zone  NOT NULL,  
   imm real NOT NULL,  
   temez real NOT NULL);
 
@@ -22,7 +22,7 @@ BEGIN
 		
 			FOR i IN  select id from puntoscontrol
 						LOOP
-							INSERT into public.curvas (datetime,imm,temez,fk_puntoscontrol)
+							INSERT into public.curvas (fechahora,imm,temez,fk_puntoscontrol)
 							VALUES
 							( fecha , random()*(25-1)+counter,random()*(25-1)+counter ,i.id);
 			END LOOP;
